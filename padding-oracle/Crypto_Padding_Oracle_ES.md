@@ -21,6 +21,20 @@ En este laboratorio, se proporcionan a los estudiantes dos servidores oráculo e
 
 - Capítulo 21 del libro SEED, *Computer & Internet Security: A Hands-on Approach*, 2ª edición, por Wenliang Du. Ver detalles en https://www.handsonsecurity.net.
 
+**Lectura previa recomendada (10 min).** Ejercicio gratuito de PentesterLab: https://pentesterlab.com/exercises/padding_oracle (<1h, nivel medio). Lea las secciones *Cipher Block Chaining*, *Padding*, *Padding Oracle* y *The theory*: su derivación `I15 = 0x01 ^ E'7` es la misma matemática de este laboratorio (`D2[pos] = CC1[pos] ⊕ K`). Fíjese en su conclusión (el cifrado sin autenticación permite descifrar y re-cifrar a gusto) y en su consejo de *manual exploitation*: escribir su propia herramienta antes de automatizar.
+
+**Verificación con PadBuster.** PadBuster (https://github.com/GDSSecurity/PadBuster, Perl) automatiza este mismo ataque sobre aplicaciones HTTP. No se conecta directamente al oráculo TCP de este laboratorio; úselo en el ejercicio de PentesterLab para contrastar que entiende el comportamiento del oráculo:
+
+```bash
+git clone https://github.com/GDSSecurity/PadBuster && cd PadBuster
+# Descifrar la cookie (bloque de 8 bytes en ese ejercicio):
+perl padbuster.pl http://<IP-del-lab> "<cookie>" 8 -cookies "auth=<cookie>"
+# Re-cifrar un mensaje a su elección:
+perl padbuster.pl http://<IP-del-lab> "<cookie>" 8 -cookies "auth=<cookie>" -plaintext "user=admin"
+```
+
+Nota: el informe se califica sobre su propio código contra el oráculo SEED, no sobre salidas de PadBuster.
+
 **Entorno de laboratorio.** Este laboratorio ha sido probado en la VM SEED Ubuntu 20.04. Puede descargar una imagen preconstruida desde el sitio web de SEED, y ejecutar la VM SEED en su propio computador. Sin embargo, la mayoría de los laboratorios SEED pueden realizarse en la nube, y puede seguir nuestras instrucciones para crear una VM SEED en la nube.
 
 ## 2. Entorno de laboratorio
