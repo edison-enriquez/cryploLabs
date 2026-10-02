@@ -7,12 +7,13 @@ El atacante es el propio codespace. Solo se levanta el oráculo.
 
 ```
 padding-oracle/
-  docker-compose.yml  # solo oraculo, publica 5000 (L1) y 6000 (L2)
-  task1.sh
-  manual_attack_ES.py
-  attack_l1.py
-  attack_l1_p1.py
-  attack_l2.py
+  docker-compose.yml          # solo oraculo, publica 5000 (L1) y 6000 (L2)
+  task1.sh                    # Task 1: padding PKCS#7 con openssl
+  manual_attack.py            # Task 2: esqueleto oficial SEED (K=1)
+  manual_attack_ES.py         # Task 2: mismo esqueleto comentado en español
+  probe.py                    # prueba de conexión al oráculo
+  notebook_ayudas.ipynb       # ayudas paso a paso con ejercicios TODO
+  Crypto_Padding_Oracle_ES.md # guía del laboratorio en español
 ../.devcontainer/devcontainer.json  # Docker-in-Docker + Python + forward 5000/6000
 ```
 
@@ -34,7 +35,7 @@ nc -vz 127.0.0.1 6000
 python3 -c "import socket;print(socket.create_connection(('127.0.0.1',5000),timeout=5).recv(4096).decode()[:96])"
 ```
 
-No uses `10.9.0.80` en Codespaces. Los scripts ya usan `ORACLE_HOST=127.0.0.1` por defecto.
+No uses `10.9.0.80` en Codespaces. `manual_attack_ES.py` y `probe.py` ya usan `ORACLE_HOST=127.0.0.1` por defecto; en `manual_attack.py` (esqueleto oficial) cambia el host a `127.0.0.1` a mano.
 Solo si usas la red docker original (con kali) usa `ORACLE_HOST=10.9.0.80`.
 
 ## 3. Practica paso a paso
@@ -42,16 +43,23 @@ Solo si usas la red docker original (con kali) usa `ORACLE_HOST=10.9.0.80`.
 ```bash
 cd padding-oracle
 
-# Task 1 - padding
+# Task 1 - padding (bash + openssl)
 bash task1.sh
 
-# Task 2 - Nivel 1 manual/automatico (puerto 5000)
-python3 manual_attack_ES.py
-python3 attack_l1.py
-python3 attack_l1_p1.py   # opcional, deriva P1
+# Conexión al oráculo (verifica que responde)
+python3 probe.py
 
-# Task 3 - Nivel 2 automatizado (puerto 6000, una sola conexion)
-python3 attack_l2.py
+# Task 2 - Nivel 1 manual (puerto 5000)
+# Completa manual_attack_ES.py variando K=1..16.
+# Registra por cada byte: CC1 válido, D2 y P2 = C1 xor D2.
+python3 manual_attack_ES.py
+
+# Ayudas paso a paso con ejercicios (Jupyter):
+# notebook_ayudas.ipynb
+
+# Task 3 - Nivel 2 automatizado (puerto 6000, UNA sola conexión)
+# Automatiza el mismo ataque para todos los bloques.
+# Entrega tu script + salida.
 ```
 
 ## 4. Apagar
