@@ -13,7 +13,7 @@
     "5000": { "label": "oracle L1", "onAutoForward": "notify" },
     "6000": { "label": "oracle L2", "onAutoForward": "notify" }
   },
-  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y openssl xxd netcat-openbsd && python3 --version && docker --version && docker compose version",
-  "postStartCommand": "bash -c 'for i in $(seq 1 30); do docker info >/dev/null 2>&1 && break; sleep 2; done; cd padding-oracle && docker compose up -d && docker ps'",
+  "postCreateCommand": "sudo apt-get update; sudo apt-get install -y openssl xxd netcat-openbsd; python3 --version; docker --version; docker compose version; true",
+  "postStartCommand": "bash -c 'for i in $(seq 1 30); do docker info >/dev/null 2>&1 && break; sleep 2; done; cd padding-oracle && (docker compose up -d || echo COMPOSE-PENDIENTE: levantalo a mano con docker compose up -d); true'",
   "remoteUser": "vscode"
 }
