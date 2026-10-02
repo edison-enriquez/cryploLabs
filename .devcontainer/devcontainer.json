@@ -1,0 +1,18 @@
+// Codespace para el lab Padding Oracle.
+// El atacante es el propio codespace, solo se levanta el oraculo con docker-compose.
+{
+  "name": "cryploLabs padding-oracle",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/python:1": {},
+    "ghcr.io/devcontainers/features/common-utils:2": {}
+  },
+  "forwardPorts": [5000, 6000],
+  "portsAttributes": {
+    "5000": { "label": "oracle L1", "onAutoForward": "notify" },
+    "6000": { "label": "oracle L2", "onAutoForward": "notify" }
+  },
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y openssl xxd netcat-openbsd && python3 --version && docker --version && docker compose version",
+  "remoteUser": "vscode"
+}
